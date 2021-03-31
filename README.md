@@ -1,2 +1,7 @@
-# VtkUnityWorkbench
-VTK Unity plugin enabling visualization creation in VR
+# All-In-One VR visualization workbench
+
+This is the main repository for the code from the my Master Thesis. Other than me, a number of BSc students have made their theses based on this and I will try to keep the list updated with the different updates, new features and toolkit components that are added.
+
+This Unity plugin is composed of a underlying architecture that connects VTK and Unity using a shared OpenGL context (see Wheeler et al.'s plugin on which this is based [here](https://gitlab.com/3dheart_public/vtktounity)) and a toolbox of UI components that are called for interactive manipulation through introspection on the VTK classes. In particular, these components are to be compounded in order to create a modular UI where the data for the VTK pipelines can be inserted.
+
+If you want to contribute, there a number of parts where you could do so. If you are more interested in the UI part of the plugin, you can develop or refine the UI components in the *Toolbox*. If you want to enhance or expand the architecture you are free to do so. You can fork this repository but we ask you to open a pull request when you are at a stable stage in your development so we can maintain this tool updated and running rather than fragmenting it in numerous repositories.
