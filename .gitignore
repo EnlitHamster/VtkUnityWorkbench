@@ -587,3 +587,5 @@ InitTestScene*.unity
 # Fody - auto-generated XML schema
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,unity,csharp
+
+*.png
