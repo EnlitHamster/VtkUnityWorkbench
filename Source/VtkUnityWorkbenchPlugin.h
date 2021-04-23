@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PlatformBase.h"
-#include "VtkUnityWorkbenchApi.h"
+#include "VtkUnityWorkbenchAPI.h"
 
 #include <memory>
 

@@ -30,5 +30,9 @@ public:
 
 	typedef std::function<void(DebugLogLevel, std::string)> DebugLogFunc;
 	virtual void SetDebugLogFunction(DebugLogFunc func) = 0;
+
+	// Is the API using "reversed" (1.0 at near plane, 0.0 at far plane) depth buffer?
+	// Reversed Z is used on modern platforms, and improves depth buffer precision.
+	virtual bool GetUsesReverseZ() = 0;
 };
 
