@@ -1,8 +1,6 @@
 Bin
 Build
-Source/GL
-Source/Unity
 *.png
 *.vcxproj
-
+*.sln
 *.filters

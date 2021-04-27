@@ -29,6 +29,13 @@ public:
 };
 
 // --------------------------------------------------------------------------
+// Set the camera View matrix (column major array, Open GL style)
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API SetViewMatrix(Float16 & view4x4ColMajor);
+
+// Set the camera Projection matrix (column major array, Open GL style)
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API SetProjectionMatrix(Float16 & projection4x4ColMajor);
+
+// --------------------------------------------------------------------------
 // OnRenderEvent
 // This will be called for GL.IssuePluginEvent script calls; eventID will
 // be the integer passed to IssuePluginEvent. In this example, we just ignore

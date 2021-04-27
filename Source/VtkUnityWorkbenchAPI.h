@@ -34,5 +34,7 @@ public:
 	// Is the API using "reversed" (1.0 at near plane, 0.0 at far plane) depth buffer?
 	// Reversed Z is used on modern platforms, and improves depth buffer precision.
 	virtual bool GetUsesReverseZ() = 0;
+
+	virtual void UpdateVtkCameraAndRender(const std::array<double, 16>& viewMatrix, const std::array<double, 16>& projectionMatrix) = 0;
 };
 

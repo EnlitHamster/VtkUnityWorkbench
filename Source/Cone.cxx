@@ -12,37 +12,37 @@
 
 int main(int, char*[])
 {
-  vtkNew<vtkNamedColors> colors;
+	vtkNew<vtkNamedColors> colors;
 
-  // Create a cone
-  vtkNew<vtkConeSource> coneSource;
-  coneSource->Update();
+	// Create a cone
+	vtkNew<vtkConeSource> coneSource;
+	coneSource->Update();
 
-  // Create a mapper and actor
-  vtkNew<vtkPolyDataMapper> mapper;
-  mapper->SetInputConnection(coneSource->GetOutputPort());
+	// Create a mapper and actor
+	vtkNew<vtkPolyDataMapper> mapper;
+	mapper->SetInputConnection(coneSource->GetOutputPort());
 
-  vtkNew<vtkActor> actor;
-  actor->SetMapper(mapper);
-  actor->GetProperty()->SetDiffuseColor(colors->GetColor3d("bisque").GetData());
+	vtkNew<vtkActor> actor;
+	actor->SetMapper(mapper);
+	actor->GetProperty()->SetDiffuseColor(colors->GetColor3d("bisque").GetData());
 
-  // Create a renderer, render window, and interactor
-  vtkNew<vtkRenderer> renderer;
-  vtkNew<vtkRenderWindow> renderWindow;
-  renderWindow->AddRenderer(renderer);
-  renderWindow->SetSize(640, 480);
+	// Create a renderer, render window, and interactor
+	vtkNew<vtkRenderer> renderer;
+	vtkNew<vtkRenderWindow> renderWindow;
+	renderWindow->AddRenderer(renderer);
+	renderWindow->SetSize(640, 480);
 
-  vtkNew<vtkRenderWindowInteractor> renderWindowInteractor;
-  renderWindowInteractor->SetRenderWindow(renderWindow);
+	vtkNew<vtkRenderWindowInteractor> renderWindowInteractor;
+	renderWindowInteractor->SetRenderWindow(renderWindow);
 
-  // Add the actors to the scene
-  renderer->AddActor(actor);
-  renderer->SetBackground(colors->GetColor3d("Salmon").GetData());
+	// Add the actors to the scene
+	renderer->AddActor(actor);
+	renderer->SetBackground(colors->GetColor3d("Salmon").GetData());
 
-  // Render and interact
-  renderWindow->SetWindowName("Cone");
-  renderWindow->Render();
-  renderWindowInteractor->Start();
+	// Render and interact
+	renderWindow->SetWindowName("Cone");
+	renderWindow->Render();
+	renderWindowInteractor->Start();
 
-  return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
