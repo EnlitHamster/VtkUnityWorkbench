@@ -7,12 +7,13 @@
 #include <vtkMatrix4x4.h>
 #include <vtkSmartPointer.h>
 
-#include "VtkUnityWorkbenchAPIDefines.h"
+#include "VtkToUnityAPIDefines.h"
 
 // --------------------------------------------------------------------------
 // Standard structures to ease data exchange
 
-inline vtkSmartPointer<vtkMatrix4x4> Float16ToVtkMatrix4x4(const Float16& matrixIn)
+inline vtkSmartPointer<vtkMatrix4x4> Float16ToVtkMatrix4x4(
+	const Float16& matrixIn)
 {
 	auto vtkMatrix = vtkSmartPointer<vtkMatrix4x4>::New();
 
@@ -36,9 +37,10 @@ public:
 		: q()
 		, m()
 		, c()
-	{ }
+	{}
 
-	~SafeQueue(void) { }
+	~SafeQueue(void)
+	{}
 
 	// Add an element to the queue.
 	void enqueue(T t)

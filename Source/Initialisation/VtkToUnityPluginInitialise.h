@@ -2,7 +2,7 @@
 // Example low level rendering Unity plugin
 
 #include "../PlatformBase.h"
-#include "../VtkUnityWorkbenchAPI.h"
+#include "../VtkToUnityAPI.h"
 
 #define PLUGINEX(rtype) extern "C" UNITY_INTERFACE_EXPORT rtype UNITY_INTERFACE_API
 

@@ -4,3 +4,5 @@ Build
 *.vcxproj
 *.sln
 *.filters
+SourceOld
+.vscode

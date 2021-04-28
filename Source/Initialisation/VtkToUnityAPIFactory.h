@@ -1,15 +1,15 @@
 #pragma once
 
-#include "../VtkUnityWorkbenchAPI.h"
+#include "../VtkToUnityAPI.h"
 
 #include <memory>
 
-class VtkUnityWorkbenchAPIFactory
+class VtkToUnityAPIFactory
 {
 public:
 	static void Initialise(UnityGfxRenderer apiType);
 	static void Shutdown();
 
 	static bool Initialised();
-	static std::weak_ptr<VtkUnityWorkbenchAPI> GetAPI();
+	static std::weak_ptr<VtkToUnityAPI> GetAPI();
 };

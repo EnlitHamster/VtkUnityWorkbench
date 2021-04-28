@@ -1,9 +1,9 @@
 // Example low level rendering Unity plugin
-#include "VtkUnityWorkbenchPluginInitialise.h"
+#include "VtkToUnityPluginInitialise.h"
 
-#include "../VtkUnityWorkbenchPlugin.h"
+#include "../VtkToUnityPlugin.h"
 
-#include "VtkUnityWorkbenchAPIFactory.h"
+#include "VtkToUnityAPIFactory.h"
 
 #include <assert.h>
 #include <math.h>
@@ -45,11 +45,11 @@ extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginUnload()
 typedef void	(UNITY_INTERFACE_API * PluginLoadFunc)(IUnityInterfaces* unityInterfaces);
 typedef void	(UNITY_INTERFACE_API * PluginUnloadFunc)();
 
-extern "C" void	UnityRegisterVtkUnityWorkbenchPlugin(PluginLoadFunc loadPlugin, PluginUnloadFunc unloadPlugin);
+extern "C" void	UnityRegisterVtkToUnityPlugin(PluginLoadFunc loadPlugin, PluginUnloadFunc unloadPlugin);
 
 extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API RegisterPlugin()
 {
-	UnityRegisterVtkUnityWorkbenchPlugin(UnityPluginLoad, UnityPluginUnload);
+	UnityRegisterVtkToUnityPlugin(UnityPluginLoad, UnityPluginUnload);
 }
 #endif
 
@@ -65,27 +65,27 @@ static void UNITY_INTERFACE_API OnGraphicsDeviceEvent(UnityGfxDeviceEventType ev
 	{
 		//assert(sCurrentAPI == NULL);
 		//assert(sCurrentAPI.expired());
-		assert(!VtkUnityWorkbenchPlugin::GotVtkUnityWorkbenchAPI());
-		//assert(VtkUnityWorkbenchAPIFactory::Initialised());
+		assert(!VtkToUnityPlugin::GotVtkToUnityAPI());
+		//assert(VtkToUnityAPIFactory::Initialised());
 		sDeviceType = sGraphics->GetRenderer();
-		//sCurrentAPI = CreateVtkUnityWorkbenchAPI(sDeviceType);
-		VtkUnityWorkbenchAPIFactory::Initialise(sDeviceType);
-		VtkUnityWorkbenchPlugin::SetVtkUnityWorkbenchAPI(VtkUnityWorkbenchAPIFactory::GetAPI());
+		//sCurrentAPI = CreateVtkToUnityAPI(sDeviceType);
+		VtkToUnityAPIFactory::Initialise(sDeviceType);
+		VtkToUnityPlugin::SetVtkToUnityAPI(VtkToUnityAPIFactory::GetAPI());
 	}
 
 	// Let the implementation process the device related events
-	//if (VtkUnityWorkbenchAPIFactory::Initialised())
+	//if (VtkToUnityAPIFactory::Initialised())
 	//if (auto sharedAPI = sCurrentAPI.lock())
 	//{
 	//	sharedAPI->ProcessDeviceEvent(eventType, sUnityInterfaces);
 	//}
 
-	VtkUnityWorkbenchPlugin::ProcessDeviceEventXYZ(eventType, sUnityInterfaces);
+	VtkToUnityPlugin::ProcessDeviceEventXYZ(eventType, sUnityInterfaces);
 
 	// Cleanup graphics API implementation upon shutdown
 	if (eventType == kUnityGfxDeviceEventShutdown)
 	{
-		VtkUnityWorkbenchAPIFactory::Shutdown();
+		VtkToUnityAPIFactory::Shutdown();
 		sDeviceType = kUnityGfxRendererNull;
 	}
 }
