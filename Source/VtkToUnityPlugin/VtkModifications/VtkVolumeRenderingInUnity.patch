@@ -1,0 +1,264 @@
+diff --git a/Examples/Charts/Cxx/GraphItem.cxx b/Examples/Charts/Cxx/GraphItem.cxx
+index 1394657a88..78dd29aa86 100644
+--- a/Examples/Charts/Cxx/GraphItem.cxx
++++ b/Examples/Charts/Cxx/GraphItem.cxx
+@@ -27,7 +27,7 @@
+ 
+ #include "vtkObjectFactory.h"
+ 
+-#include "vtkRegressionTestImage.h"
++//#include "vtkRegressionTestImage.h"
+ 
+ class GraphAnimate : public vtkCommand
+ {
+diff --git a/Examples/VolumeRendering/Cxx/GPURenderDemo.cxx b/Examples/VolumeRendering/Cxx/GPURenderDemo.cxx
+index 752fd43829..e4532c8d29 100644
+--- a/Examples/VolumeRendering/Cxx/GPURenderDemo.cxx
++++ b/Examples/VolumeRendering/Cxx/GPURenderDemo.cxx
+@@ -32,6 +32,11 @@
+ #include "vtkXMLImageDataReader.h"
+ #include "vtkSmartVolumeMapper.h"
+ 
++#include <array>
++#include <vtkVolumeOutlineSource.h>
++#include <vtkSphereSource.h>
++#include <vtkPolyDataMapper.h>
++
+ #define VTI_FILETYPE 1
+ #define MHA_FILETYPE 2
+ 
+@@ -115,8 +120,8 @@ int main(int argc, char *argv[])
+ 
+   int count = 1;
+   char *dirname = NULL;
+-  double opacityWindow = 4096;
+-  double opacityLevel = 2048;
++  double opacityWindow = 200.0; // 4096;
++  double opacityLevel = 250.0; // 2048;
+   int blendType = 0;
+   int clip = 0;
+   double reductionFactor = 1.0;
+@@ -306,6 +311,42 @@ int main(int argc, char *argv[])
+     exit(EXIT_FAILURE);
+   }
+ 
++
++  // ****************************************
++  // we alter the volume in our Unity plugin in the following way
++  std::array<double, 3> volumeSpacing;
++  input->GetSpacing(volumeSpacing.data());
++  std::cout << "volumeSpacing: ";
++  for (const auto& e : volumeSpacing) {
++	  std::cout << e << ", ";
++  }
++  std::cout << std::endl;
++  std::for_each(volumeSpacing.begin(), volumeSpacing.end(), [](double &s) { s *= 0.001; });
++  input->SetSpacing(volumeSpacing.data());
++
++  std::array<int, 6> volumeExtent;
++  input->GetExtent(volumeExtent.data());
++
++  // origin is in mm? converting to m
++  std::array<double, 3> origin;
++  input->GetOrigin(origin.data());
++
++  std::array<int, 3> volumeExtentMin = { volumeExtent[0], volumeExtent[2], volumeExtent[4] };
++  std::array<int, 3> volumeExtentMax = { volumeExtent[1], volumeExtent[3], volumeExtent[5] };
++
++  std::array<double, 3> volumeCentre;
++  for (auto &volumeCentreElem : volumeCentre)
++  {
++	  auto i = &volumeCentreElem - &volumeCentre[0];
++	  volumeCentreElem = volumeSpacing[i] * -0.5 * (volumeExtentMin[i] + volumeExtentMax[i]);
++  }
++
++  input->SetOrigin(volumeCentre.data());
++  // end
++  // ******************************************
++
++
++
+   vtkImageResample *resample = vtkImageResample::New();
+   if ( reductionFactor < 1.0 )
+   {
+@@ -351,7 +392,7 @@ int main(int argc, char *argv[])
+   }
+   else
+   {
+-    mapper->SetInputConnection( reader->GetOutputPort() );
++    mapper->SetInputData(input);
+   }
+ 
+ 
+@@ -523,8 +564,40 @@ int main(int argc, char *argv[])
+   renWin->SetSize(600,600);
+   renWin->Render();
+ 
++  // Volume Outline ===============================================================================
++  auto volumeOutline = vtkSmartPointer<vtkVolumeOutlineSource>::New();
++  volumeOutline->SetVolumeMapper(mapper);
++
++  vtkSmartPointer<vtkPolyDataMapper> outlineMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
++  outlineMapper->SetInputConnection(volumeOutline->GetOutputPort());
++
++  vtkSmartPointer<vtkActor> outlineActor = vtkSmartPointer<vtkActor>::New();
++  outlineActor->SetMapper(outlineMapper);
++  // Volume Outline End ===========================================================================
++
++  // Sphere =======================================================================================
++  auto sphereSource = vtkSmartPointer<vtkSphereSource>::New();
++  sphereSource->SetThetaResolution(100);
++  sphereSource->SetPhiResolution(50);
++
++  vtkSmartPointer<vtkPolyDataMapper> sphereMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
++  sphereMapper->SetInputConnection(sphereSource->GetOutputPort());
++
++  vtkSmartPointer<vtkActor> sphere1 = vtkSmartPointer<vtkActor>::New();
++  sphere1->SetMapper(sphereMapper);
++  sphere1->GetProperty()->SetColor(1, 0, 0);
++  sphere1->GetProperty()->SetAmbient(0.3);
++  sphere1->GetProperty()->SetDiffuse(0.0);
++  sphere1->GetProperty()->SetSpecular(0.0);
++  sphere1->GetProperty()->SetSpecularPower(5.0);
++
++  sphere1->SetScale(0.01);
++  // Sphere End ===================================================================================
++
+   // Add the volume to the scene
+   renderer->AddVolume( volume );
++  renderer->AddVolume(outlineActor);
++  renderer->AddActor(sphere1);
+ 
+   renderer->ResetCamera();
+ 
+@@ -533,6 +606,11 @@ int main(int argc, char *argv[])
+ 
+   iren->Start();
+ 
++//  for (int i = 0; i < 5; ++i)
++//  {
++//    renWin->Render();
++//  }
++
+   opacityFun->Delete();
+   colorFun->Delete();
+   property->Delete();
+diff --git a/Rendering/External/vtkExternalOpenGLCamera.cxx b/Rendering/External/vtkExternalOpenGLCamera.cxx
+index 3e3d8706a5..21dc827528 100644
+--- a/Rendering/External/vtkExternalOpenGLCamera.cxx
++++ b/Rendering/External/vtkExternalOpenGLCamera.cxx
+@@ -106,12 +106,12 @@ void vtkExternalOpenGLCamera::Render(vtkRenderer *ren)
+   {
+     if (ren->GetRenderWindow()->GetDoubleBuffer())
+     {
+-      glDrawBuffer(static_cast<GLenum>(win->GetBackBuffer()));
++      //glDrawBuffer(static_cast<GLenum>(win->GetBackBuffer()));
+ 
+-      // Reading back buffer means back left. see OpenGL spec.
+-      // because one can write to two buffers at a time but can only read from
+-      // one buffer at a time.
+-      glReadBuffer(static_cast<GLenum>(win->GetBackBuffer()));
++      //// Reading back buffer means back left. see OpenGL spec.
++      //// because one can write to two buffers at a time but can only read from
++      //// one buffer at a time.
++      //glReadBuffer(static_cast<GLenum>(win->GetBackBuffer()));
+     }
+     else
+     {
+diff --git a/Rendering/OpenGL2/vtkTextureObject.cxx b/Rendering/OpenGL2/vtkTextureObject.cxx
+index 982d90bddb..51e49810c4 100644
+--- a/Rendering/OpenGL2/vtkTextureObject.cxx
++++ b/Rendering/OpenGL2/vtkTextureObject.cxx
+@@ -2063,6 +2063,29 @@ void vtkTextureObject::CopyFromFrameBuffer(int srcXmin,
+   vtkOpenGLCheckErrorMacro("failed at glCopyTexImage2D " << this->Format);
+ }
+ 
++////----------------------------------------------------------------------------
++void vtkTextureObject::CopyFromTexture(unsigned int sourceTextureId,
++                                       int width,
++                                       int height)
++{
++  assert("pre: is2D" && this->GetNumberOfDimensions()==2);
++
++  this->Activate();
++
++  GLint targetTextureId;
++  glGetIntegerv(GL_TEXTURE_BINDING_2D, &targetTextureId);
++  vtkOpenGLCheckErrorMacro("failed at glGetIntegerv");
++
++  glCopyImageSubData(
++    sourceTextureId, GL_TEXTURE_2D, 0, 0, 0, 0,
++	  targetTextureId, GL_TEXTURE_2D, 0, 0, 0, 0,
++    width, height, 1);
++  vtkOpenGLCheckErrorMacro("failed at glCopyImageSubData");
++
++  glBindTexture(this->Target, this->Handle);
++  vtkOpenGLCheckErrorMacro("failed at glBindTexture");
++}
++
+ //----------------------------------------------------------------------------
+ int vtkTextureObject::GetMaximumTextureSize(vtkOpenGLRenderWindow* context)
+ {
+diff --git a/Rendering/OpenGL2/vtkTextureObject.h b/Rendering/OpenGL2/vtkTextureObject.h
+index fd2c0c1a9a..f8311b09c5 100644
+--- a/Rendering/OpenGL2/vtkTextureObject.h
++++ b/Rendering/OpenGL2/vtkTextureObject.h
+@@ -712,6 +712,10 @@ public:
+                            int width,
+                            int height);
+ 
++  void CopyFromTexture(unsigned int sourceTextureId,
++                       int width,
++                       int height);
++
+   /**
+    * Get the shift and scale required in the shader to
+    * return the texture values to their original range.
+diff --git a/Rendering/VolumeOpenGL2/vtkOpenGLGPUVolumeRayCastMapper.cxx b/Rendering/VolumeOpenGL2/vtkOpenGLGPUVolumeRayCastMapper.cxx
+index 609a794471..511716f8ad 100644
+--- a/Rendering/VolumeOpenGL2/vtkOpenGLGPUVolumeRayCastMapper.cxx
++++ b/Rendering/VolumeOpenGL2/vtkOpenGLGPUVolumeRayCastMapper.cxx
+@@ -1435,8 +1435,41 @@ void vtkOpenGLGPUVolumeRayCastMapper::vtkInternal::CaptureDepthTexture(
+   }
+ 
+ #if GL_ES_VERSION_3_0 != 1
+-  // currently broken on ES
+-  this->DepthTextureObject->CopyFromFrameBuffer(this->WindowLowerLeft[0],
++  GLint framebufferBinding;
++  glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &framebufferBinding);
++  GLint error = glGetError(); // For debugging - VTK error reporting doesn't work in this class
++
++  if (0 != framebufferBinding) // we are using the default framebinding, default behaviour
++  {
++    GLint depthTextureName;
++    glGetFramebufferAttachmentParameteriv(
++      GL_DRAW_FRAMEBUFFER,
++      GL_DEPTH_ATTACHMENT,
++      GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME,
++      &depthTextureName);
++    error = glGetError();
++
++    // This is a workaround for the Steam VR in unity preview not working - fall back on the old method
++    glBindTexture(GL_TEXTURE_2D, depthTextureName);
++    int sourceW, sourceH;
++    int miplevel = 0;
++    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_WIDTH, &sourceW);
++    glGetTexLevelParameteriv(GL_TEXTURE_2D, miplevel, GL_TEXTURE_HEIGHT, &sourceH);
++
++    if (sourceW == this->WindowSize[0] && sourceH == this->WindowSize[1])
++    {
++      this->DepthTextureObject->CopyFromTexture(
++        depthTextureName,
++        this->WindowSize[0],
++        this->WindowSize[1]);
++      error = glGetError();
++      return; // exit early - we've copied
++    }
++  }
++
++  // Copy from the default buffer as default operaton
++  this->DepthTextureObject->CopyFromFrameBuffer(
++    this->WindowLowerLeft[0],
+     this->WindowLowerLeft[1],
+     0,
+     0,

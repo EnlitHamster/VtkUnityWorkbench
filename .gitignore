@@ -6,3 +6,4 @@ Build
 *.filters
 SourceOld
 .vscode
+*.meta
