@@ -7,3 +7,5 @@ Build
 SourceOld
 .vscode
 *.meta
+
+*.csproj
