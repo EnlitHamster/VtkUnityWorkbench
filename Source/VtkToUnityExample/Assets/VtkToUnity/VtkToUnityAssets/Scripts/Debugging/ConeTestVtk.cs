@@ -6,6 +6,28 @@ using UnityEngine;
 using System.Runtime.InteropServices;
 
 using ThreeDeeHeartPlugins;
+using VtkUnityWorkbench;
+
+class VtkConeSourceUIFactory : IComponentFactory
+{
+    public void Destroy()
+    {
+        // TODO: implement UI hiding routine
+
+
+
+        throw new NotImplementedException();
+    }
+
+    public void Show()
+    {
+        // TODO: implement UI showing routine
+
+
+
+        throw new NotImplementedException();
+    }
+}
 
 public class ConeTestVtk : MonoBehaviour
 {
@@ -50,35 +72,21 @@ public class ConeTestVtk : MonoBehaviour
 
         _shapeIdPositions.Add(idPosition);
 
-        VtkToUnityPlugin.SetShapePrimitiveProperty(id, "Height", 0.5f.ToString());
+        VtkUnityWorkbenchPlugin.SetProperty<double>(id, "Height", 0.5f);
+        VtkUnityWorkbenchPlugin.SetProperty(id, "Resolution", 200);
 
-        var buffer = new StringBuilder();
-        VtkToUnityPlugin.GetShapePrimitiveProperty(id, "Height", buffer);
-        Debug.Log("Height: " + buffer);
+        var coneHeight = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Height");
+        var coneRadius = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Radius");
+        var coneResolution = VtkUnityWorkbenchPlugin.GetProperty<int>(id, "Resolution");
+        var coneAngle = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Angle");
+        var coneCapping = VtkUnityWorkbenchPlugin.GetProperty<int>(id, "Capping");
+        var coneCenter = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Center");
+        var coneDirection = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Direction");
 
-        buffer.Clear();
-        VtkToUnityPlugin.GetShapePrimitiveProperty(id, "Radius", buffer);
-        Debug.Log("Radius: " + buffer);
+        var coneFactory = new VtkConeSourceUIFactory();
+        VtkUnityWorkbenchPlugin.RegisterComponentFactory("vtkConeSource", coneFactory);
 
-        buffer.Clear();
-        VtkToUnityPlugin.GetShapePrimitiveProperty(id, "Resolution", buffer);
-        Debug.Log("Resolution: " + buffer);
-
-        buffer.Clear();
-        VtkToUnityPlugin.GetShapePrimitiveProperty(id, "Angle", buffer);
-        Debug.Log("Angle: " + buffer);
-
-        buffer.Clear();
-        VtkToUnityPlugin.GetShapePrimitiveProperty(id, "Capping", buffer);
-        Debug.Log("Capping: " + buffer);
-
-        buffer.Clear();
-        VtkToUnityPlugin.GetShapePrimitiveProperty(id, "Center", buffer);
-        Debug.Log("Center: " + buffer);
-
-        buffer.Clear();
-        VtkToUnityPlugin.GetShapePrimitiveProperty(id, "Direction", buffer);
-        Debug.Log("Direction: " + buffer);
+        VtkUnityWorkbenchPlugin.ShowComponentFor("vtkConeSource");
     }
 
     void OnDestroy()
@@ -88,6 +96,8 @@ public class ConeTestVtk : MonoBehaviour
         {
             VtkToUnityPlugin.RemoveProp3D(idPosition.Id);
         }
+
+        VtkUnityWorkbenchPlugin.DestroyComponentFor("vtkConeSource");
     }
 
     // Update is called once per frame
