@@ -11,10 +11,12 @@ set(OUTPUT_REL ../build)
 # Folders files
 set(GLEW_DIR ../source/GLEW)
 set(CPP_DIR ../source)
+set(ADAPTERS_DIR ../source/Adapters)
 set(INITIALISATION_DIR ../source/Initialisation)
 set(HEADER_DIR_1 ../source/GLEW)
 set(HEADER_DIR_2 ../source)
 set(HEADER_DIR_3 ../source/Unity)
+set(HEADER_DIR_4 ../source/Adapters)
 
 ############## CMake Project ################
 #        The main options of project        #
@@ -101,10 +103,12 @@ SET_SOURCE_FILES_PROPERTIES( ${GLEW_DIR}/glew.c PROPERTIES LANGUAGE CXX )
 file(GLOB SRC_FILES
     ${GLEW_DIR}/*.c
     ${CPP_DIR}/*.cpp
+	${ADAPTERS_DIR}/*.cpp
     ${INITIALISATION_DIR}/*.cpp
     ${HEADER_DIR_1}/*.h
     ${HEADER_DIR_2}/*.h
     ${HEADER_DIR_3}/*.h
+    ${HEADER_DIR_4}/*.h
     ${INITIALISATION_DIR}/*.h
     ${VTK_INCLUDE_DIR}/**/*.h
 )
