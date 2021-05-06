@@ -20,27 +20,33 @@
 ///
 /// A singleton provider class is implemented in Singleton.h
 /// always use the adapters wrapped in a singleton !!!
-class VtkToUnityAdapter
+class VtkAdapter
 {
 public:
 	template <typename T> using getter = std::stringstream(T::*)(vtkSmartPointer<vtkActor>);
 	template <typename T> using setter = void (T::*)(vtkSmartPointer<vtkActor>, LPCSTR);
 
-	virtual ~VtkToUnityAdapter() { }
+	virtual ~VtkAdapter() { }
 
-	virtual void Initialize(
-		std::string vtkObjectName, 
-		void* args) = 0;
-
-	inline std::string GetAdaptingObject() 
+	inline LPCSTR GetAdaptingObject() 
 	{
 		return m_vtkObjectName;
 	}
 
+	virtual void SetAttribute(
+		vtkSmartPointer<vtkActor> actor,
+		LPCSTR propertyName,
+		LPCSTR newValue) = 0;
+
+	virtual void GetAttribute(
+		vtkSmartPointer<vtkActor> actor,
+		LPCSTR propertyName,
+		char* retValue) = 0;
+
 protected:
 	// The name of the VTK object (as written in the wiki) for which
 	// the class acts as an adapter
-	std::string m_vtkObjectName;
+	LPCSTR m_vtkObjectName;
 
 	static inline std::stringstream ReturnError(
 		LPCSTR msg)
@@ -49,4 +55,10 @@ protected:
 		buffer << "err::(" << msg << ")";
 		return buffer;
 	}
+
+	VtkAdapter(
+		LPCSTR vtkObjectName) 
+	{ 
+		m_vtkObjectName = vtkObjectName;
+	};
 };

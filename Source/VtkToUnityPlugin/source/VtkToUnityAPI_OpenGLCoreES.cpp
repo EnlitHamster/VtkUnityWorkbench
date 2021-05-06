@@ -5,6 +5,8 @@
 
 #include "VtkToUnityInternalHelpers.h"
 
+#include "Adapters\vtkAdapterUtility.h"
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -747,7 +749,6 @@ void VtkToUnityAPI_OpenGLCoreES::SetShapePrimitiveProperty(
 	if (mNonVolumeProp3Ds.end() != actorIter)
 	{
 		auto actor = vtkActor::SafeDownCast(actorIter->second);
-		// Based on https://kitware.github.io/vtk-examples/site/Cxx/Visualization/ReverseAccess/
 		vtkSmartPointer<vtkAlgorithm> algorithm = actor->GetMapper()->GetInputConnection(0, 0)->GetProducer();
 		auto coneSource = dynamic_cast<vtkConeSource*>(algorithm.GetPointer());
 	
@@ -1145,6 +1146,9 @@ void VtkToUnityAPI_OpenGLCoreES::CreateResources()
 	// And set the current volume to point to it
 	mCurrentVolumeData = vtkSmartPointer<vtkImageData>::New();
 	mCurrentVolumeData->ShallowCopy(mSyntheticVolumeData.GetPointer());
+
+	// Register all the available adapters
+	VtkAdapterUtility::RegisterAll();
 
 	// Initialise the MPR looup table
 	// this is a good default for US images

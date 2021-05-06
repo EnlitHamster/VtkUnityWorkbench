@@ -32,7 +32,7 @@ class VtkConeSourceUIFactory : IComponentFactory
 public class ConeTestVtk : MonoBehaviour
 {
     [Range(0.001f, 1.0f)]
-    public float ConeScale = 0.5f;
+    public float ConeScale = 0.2f;
 
     struct IdPosition
     {
@@ -72,7 +72,8 @@ public class ConeTestVtk : MonoBehaviour
 
         _shapeIdPositions.Add(idPosition);
 
-        VtkUnityWorkbenchPlugin.SetProperty<double>(id, "Height", 0.5f);
+        VtkUnityWorkbenchPlugin.SetProperty<double>(id, "Height", 0.1f);
+        VtkUnityWorkbenchPlugin.SetProperty<double>(id, "Radius", 0.1f);
         VtkUnityWorkbenchPlugin.SetProperty(id, "Resolution", 200);
 
         var coneHeight = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Height");

@@ -5,7 +5,7 @@
 #include "vtkMapper.h"
 #include "vtkAlgorithmOutput.h"
 
-const std::map<LPCSTR, std::pair<VtkToUnityAdapter::getter<VtkConeSourceAdapter>, VtkToUnityAdapter::setter<VtkConeSourceAdapter>>>
+const std::unordered_map<LPCSTR, std::pair<VtkAdapter::getter<VtkConeSourceAdapter>, VtkAdapter::setter<VtkConeSourceAdapter>>>
 	VtkConeSourceAdapter::s_attributes =
 {
 	{ "Height", std::make_pair(&GetHeight, &SetHeight) },
@@ -18,9 +18,10 @@ const std::map<LPCSTR, std::pair<VtkToUnityAdapter::getter<VtkConeSourceAdapter>
 };
 
 VtkConeSourceAdapter::VtkConeSourceAdapter()
-{
-	m_vtkObjectName = "vtkConeSource";
-}
+	: VtkAdapter("vtkConeSource") { }
+
+
+// Source access based on https://kitware.github.io/vtk-examples/site/Cxx/Visualization/ReverseAccess/
 
 void VtkConeSourceAdapter::GetAttribute(
 	vtkSmartPointer<vtkActor> actor,
@@ -40,4 +41,21 @@ void VtkConeSourceAdapter::GetAttribute(
 	{
 		(this->*itAttribute->second.first)(actor) >> retValue;
 	}
+}
+
+void VtkConeSourceAdapter::SetAttribute(
+	vtkSmartPointer<vtkActor> actor,
+	LPCSTR propertyName,
+	LPCSTR newValue)
+{
+	auto algorithm = actor->GetMapper()->GetInputConnection(0, 0)->GetProducer();
+	auto coneSource = dynamic_cast<vtkConeSource*>(algorithm);
+
+	auto itAttribute = s_attributes.find(propertyName);
+
+	if (itAttribute != s_attributes.end())
+	{
+		(this->*itAttribute->second.second)(actor, newValue);
+	}
+
 }

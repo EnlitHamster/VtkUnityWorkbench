@@ -1,4 +1,4 @@
-VtkToUnityAPI_OpenGLCoreES::GetPrimitiveProperty(0, Direction);
+VtkToUnityAPI_OpenGLCoreES::GetPrimitiveProperty(19, Direction);
 	Compare "height" against Direction yields 0
 	Compare "height" against Direction with std::strcmp yields -1
 	Yielding "val::(1,0,0)"

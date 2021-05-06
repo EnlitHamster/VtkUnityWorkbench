@@ -9,3 +9,5 @@ SourceOld
 *.meta
 
 *.csproj
+
+Source/VtkToUnityPlugin/source/Adapters/vtkAdapterUtility.h

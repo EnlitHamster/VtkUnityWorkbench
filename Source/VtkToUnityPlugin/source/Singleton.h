@@ -8,14 +8,7 @@ class Singleton
 public:
 	static T* Instance()
 	{
-		if (m_instance == NULL)
-		{
-			m_instance = new T();
-		}
-
-		return m_instance;
+		static T instance{ };
+		return &instance;
 	}
-
-private:
-	static T* m_instance;
 };
