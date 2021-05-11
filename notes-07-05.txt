@@ -1,0 +1,5 @@
+- Rerouting of the context from C++ to Python making the C++ library a network switch from C# Unity to Python
+- Introspection in C++ -> overhead on development
+- Introspection in python -> can we share memory? -> overhead of copying
+- Introspection in C# -> there is no uptodate wrapper for VTK that is free, only ActiViz behind a paywall
+- Generating adapters -> risky, it is not easy to foresee all potential issues, a lot of potential overhead on development
