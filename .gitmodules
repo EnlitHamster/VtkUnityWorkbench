@@ -1,0 +1,4 @@
+[submodule "VtkUnityWorkbenchSource"]
+	path = Source
+	url = https://github.com/EnlitHamster/VtkUnityWorkbenchSource.git
+	branch = main
