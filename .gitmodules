@@ -2,3 +2,6 @@
 	path = Source
 	url = https://github.com/EnlitHamster/VtkUnityWorkbenchSource.git
 	branch = main
+[submodule "Documentation"]
+	path = Documentation
+	url = https://github.com/EnlitHamster/VR-VTK-Workbench.git
