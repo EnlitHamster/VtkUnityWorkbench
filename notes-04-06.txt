@@ -1,0 +1,3 @@
+1. introspection for lookup
+2. introspection for knowing input and output for each class
+3. study shared in windows, is it fixed pool?
