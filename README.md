@@ -86,7 +86,7 @@ At the end of this procedure, you should have some main crucial files:
 
 ### Setting up for Unity
 
-First of all, we need now to install VTK Python somewhere accessible to Python. We strongly recommend doing this installing it in the global Python install directory `%PYTHONDIR%/Lib/site-packages`, by copying in there `%WORKSPACE%/Vtk/Install/lib/python3.7/site-packages/vtk`. To test whether this works, run a command line terminal, open the Python interpreter `python` and run `import vtk`. If it returns no error, VTK Python should be correctly installed.
+First of all, we need now to install VTK Python somewhere accessible to Python. We strongly recommend doing this installing it in the global Python install directory `%PYTHONDIR%/Lib/site-packages`, by copying in there `%WORKSPACE%/Vtk/Install/lib/python3.7/site-packages/vtk`, and then the contents of `%WORKSPACE%/Vtk/Install/bin` inside `%PYTHONDIR%/Lib/site-packages/vtk` (or to any place within the PATH environmental variable, the important thing is that Python must be able to access the DLL files). To test whether this works, run a command line terminal, open the Python interpreter `python` and run `import vtk`. If it returns no error, VTK Python should be correctly installed.
 
 **At the moment, VtkUnityWorkbench does not support virtual environments, but it is a feature which we plan to introduce soon**.
 
