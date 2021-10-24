@@ -90,8 +90,4 @@ First of all, we need now to install VTK Python somewhere accessible to Python. 
 
 **At the moment, VtkUnityWorkbench does not support virtual environments, but it is a feature which we plan to introduce soon**.
 
-From here on we will refer to `%WORKSPACE%/VtkUnityWorkbench/Source/VtkToUnityExample/` as `%UNITYDIR%`
-
-Copy the contents ot `%WORKSPACE%/Vtk/Install/bin` and `%PLUGINDIR%/Install`, and `%PYTHONDIR%/python37.dll` and `%PYTHONDIR%/python37_d.dll` into `%UNITYDIR%/Assets/VtkToUnity/vtktounitybinary/Plugins/x86_64/`.
-
-Add `%UNITYDIR%` to your Unity Hub projects and download the correct Unity version. This should be enough to have your setup ready to go.
+From here on we will refer to `%WORKSPACE%/VtkUnityWorkbench/Source/VtkToUnityExample/` as `%UNITYDIR%`. Copy the contents of `%PLUGINDIR%/Install` into `%UNITYDIR%/Assets/VtkToUnity/vtktounitybinary/Plugins/x86_64/`. Add `%UNITYDIR%` to your Unity Hub projects and download the correct Unity version. This should be enough to have your setup ready to go.
