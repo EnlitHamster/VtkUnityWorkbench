@@ -80,13 +80,13 @@ The compilation of the VTK library could take up to two hours depending on the p
 
 At the end of this procedure, you should have some main crucial files:
 - `%WORKSPACE%/Vtk/Install/bin` should now contain the DLL files for VTK C++
-- `%WORKSPACE%/Vtk/Install/lib/site-packages` should contain the pyc files for VTK Python
+- `%WORKSPACE%/Vtk/Install/lib/python3.7/site-packages` should contain the pyc files for VTK Python
 - `%PLUGINDIR%/Install` should now contain the DLL file and the build files for VtkUnityWorkbench
 - `%PYTHONDIR%`, the install directory of Python 3.7, should contain `python37.dll` and `python37_d.dll`
 
 ### Setting up for Unity
 
-First of all, we need now to install VTK Python somewhere accessible to Python. We strongly recommend doing this installing it in the global Python install directory `%PYTHONDIR%/Lib/site-packages`, by copying in there `%WORKSPACE%/Vtk/Install/lib/site-packages/vtk`. To test whether this works, run a command line terminal, open the Python interpreter `python` and run `import vtk`. If it returns no error, VTK Python should be correctly installed.
+First of all, we need now to install VTK Python somewhere accessible to Python. We strongly recommend doing this installing it in the global Python install directory `%PYTHONDIR%/Lib/site-packages`, by copying in there `%WORKSPACE%/Vtk/Install/lib/python3.7/site-packages/vtk`. To test whether this works, run a command line terminal, open the Python interpreter `python` and run `import vtk`. If it returns no error, VTK Python should be correctly installed.
 
 **At the moment, VtkUnityWorkbench does not support virtual environments, but it is a feature which we plan to introduce soon**.
 
