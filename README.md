@@ -1,4 +1,4 @@
-# All-In-One VR visualization workbench
+# VtkUnityWorkbench - An All-In-One VR visualization workbench
 
 This is the main repository for the code from the my Master Thesis. Other than me, a number of BSc students have made their theses based on this and I will try to keep the list updated with the different updates, new features and toolkit components that are added.
 
@@ -54,7 +54,7 @@ If you want to contribute, there a number of parts where you could do so. If you
   - Right click on *ALL_BUILD* and run *Build* and wait for the build to finish
   - Right click on *INSTALL* and run *Project only > Build INSTALL only*
 
-The compilation of the VTK library could take up to two hours depending on the performances of your computer. If it takes longer than that, we suggesat you switch to a more powerful workstation for ease of development, as otherwise development could become very difficult and stressful.
+The compilation of the VTK library could take up to two hours depending on the performances of your computer. If it takes longer than that, we suggest you switch to a more powerful workstation for ease of development, as otherwise it could become very difficult and stressful.
 
 ### Building VtkUnityWorkbench
 
@@ -91,3 +91,18 @@ First of all, we need now to install VTK Python somewhere accessible to Python. 
 **At the moment, VtkUnityWorkbench does not support virtual environments, but it is a feature which we plan to introduce soon**.
 
 From here on we will refer to `%WORKSPACE%/VtkUnityWorkbench/Source/VtkToUnityExample/` as `%UNITYDIR%`. Copy the contents of `%PLUGINDIR%/Install` into `%UNITYDIR%/Assets/VtkToUnity/vtktounitybinary/Plugins/x86_64/`. Add `%UNITYDIR%` to your Unity Hub projects and download the correct Unity version. This should be enough to have your setup ready to go.
+
+#### Notes
+
+* The version chosen for Unity should not be important. The software is developed to be compatible with most versions. However, take care in building the plugin with the correct header files for the Unity version you are using to be sure those will not influence the correct execution. We can guarantee only since Unity *2019.3.5f1*.
+* The version chosen for VTK should not be important. The software is developed to be compatible with most versions. However, take care in running the setup process with the necessary changes, where the VTK version is important. The minimum version of VTK we support is *VTK 5*.
+
+## Roadmap
+
+A number of outstanding issues are still open regarding the Workbench. We aim at producing a solution that is stream-lined and ready-for-use. As such, our most important objectives are:
+
+* Automating the build process.
+* Releasing the Python scripts as a stand-alone Pypi package.
+* Expanding the Introspection capabilities to support any VTK pipeline.
+* Creating a UI framework in Unity for UI components.
+* Adding built-in support for interaction with VTK objects.
